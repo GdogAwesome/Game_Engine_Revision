@@ -1,0 +1,39 @@
+precision mediump float;
+
+uniform mat4 u_MVPMatrix;
+//uniform mat4 u_MVMatrix;
+uniform vec3 u_LightPos;
+
+uniform int u_AnimFrame;
+//uniform int u_TextureSize;
+
+attribute float a_HasAnim;
+attribute vec2 a_TileMap;
+attribute vec4 a_Position;
+//attribute vec2 a_TexCoordinate;
+
+
+varying vec3 v_Position;
+varying vec2 v_TexCoordinate;
+
+const float frameAdd = 200.0 / 2048.0;
+const float frameHeight = 150.0 / 2048.0;
+
+
+void main()
+{
+
+    float offset = 0.0;
+
+    v_Position = vec3(u_MVPMatrix * a_Position);
+    //vec2 uOffset = a_TexCoordinate;
+
+    //if(a_HasAnim > 0.0){
+    offset = a_HasAnim * float(frameAdd * float(u_AnimFrame));
+    //}
+    vec2 finalFrame = vec2((frameAdd * a_TileMap.x) + offset, (frameHeight * a_TileMap.y));
+
+    v_TexCoordinate = finalFrame;// vec2(float(frameAdd * a_TileMap.x), float( (frameHeight * a_TileMap.y)));// vec2((a_TexCoordinate.x + offset), a_TexCoordinate.y);
+
+	gl_Position = u_MVPMatrix *  a_Position;
+}
